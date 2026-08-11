@@ -1,0 +1,64 @@
+version: 2
+
+sources:
+  - name: football_raw
+    description: "Raw football data loaded by Airflow from API-Football"
+    database: FOOTBALL_RAW
+    schema: FOOTBALL
+
+    tables:
+      - name: raw_standings
+        description: "Daily snapshot of league standings"
+        columns:
+          - name: snapshot_date
+            description: "Date the snapshot was taken"
+          - name: league_id
+            description: "API-Football league identifier"
+          - name: team_id
+            description: "API-Football team identifier"
+          - name: rank
+            description: "Team rank in the league on snapshot date"
+          - name: points
+            description: "Total points accumulated"
+          - name: played
+            description: "Total matches played"
+          - name: win
+            description: "Total wins"
+          - name: draw
+            description: "Total draws"
+          - name: lose
+            description: "Total losses"
+          - name: goals_for
+            description: "Total goals scored"
+          - name: goals_against
+            description: "Total goals conceded"
+          - name: goal_diff
+            description: "Goal difference"
+          - name: form
+            description: "Last 5 match results"
+          - name: _loaded_at
+            description: "Timestamp when record was loaded by Airflow"
+
+      - name: raw_players
+        description: "Daily snapshot of top scorer statistics"
+        columns:
+          - name: snapshot_date
+            description: "Date the snapshot was taken"
+          - name: player_id
+            description: "API-Football player identifier"
+          - name: player_name
+            description: "Full player name"
+          - name: team_id
+            description: "API-Football team identifier"
+          - name: league_id
+            description: "API-Football league identifier"
+          - name: goals
+            description: "Total goals scored in the season"
+          - name: assists
+            description: "Total assists in the season"
+          - name: appearances
+            description: "Total appearances in the season"
+          - name: rating
+            description: "Average player rating"
+          - name: _loaded_at
+            description: "Timestamp when record was loaded by Airflow"

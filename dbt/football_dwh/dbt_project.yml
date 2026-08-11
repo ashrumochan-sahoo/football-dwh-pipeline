@@ -1,0 +1,42 @@
+name: 'football_dwh'
+version: '1.0.0'
+config-version: 2
+
+profile: 'football_dwh'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  football_dwh:
+
+    # Staging layer
+    # materialized as views — lightweight, no storage cost
+    # just clean and rename raw columns
+    staging:
+      +materialized: view
+      +schema: FOOTBALL
+      +database: FOOTBALL_STAGING
+
+    # Intermediate layer
+    # materialized as views — joins and enrichment
+    intermediate:
+      +materialized: view
+      +schema: FOOTBALL
+      +database: FOOTBALL_STAGING
+
+    # Marts layer
+    # materialized as tables — final star schema
+    # analysts query these directly
+    marts:
+      +materialized: table
+      +schema: FOOTBALL
+      +database: FOOTBALL_MARTS
