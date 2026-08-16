@@ -1,0 +1,74 @@
+# ============================================================
+# GitHub Actions CI — dbt Test Pipeline
+# Runs automatically on every push to main branch
+# Validates all dbt models and tests pass
+# ============================================================
+
+name: dbt CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dbt-test:
+    name: Run dbt Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 — Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2 — Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # Step 3 — Install dbt-snowflake
+      - name: Install dbt
+        run: |
+          pip install dbt-snowflake==1.12.0
+
+      # Step 4 — Create profiles.yml from GitHub Secrets
+      - name: Create dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          football_dwh:
+            target: ci
+            outputs:
+              ci:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+                role: FOOTBALL_TRANSFORMER
+                warehouse: FOOTBALL_TRANSFORM_WH
+                database: FOOTBALL_MARTS
+                schema: FOOTBALL
+                threads: 4
+          EOF
+
+      # Step 5 — Install dbt packages
+      - name: Install dbt packages
+        run: |
+          cd dbt/football_dwh
+          dbt deps
+
+      # Step 6 — Run dbt compile to validate SQL
+      - name: dbt compile
+        run: |
+          cd dbt/football_dwh
+          dbt compile
+
+      # Step 7 — Run dbt tests
+      - name: dbt test
+        run: |
+          cd dbt/football_dwh
+          dbt test
