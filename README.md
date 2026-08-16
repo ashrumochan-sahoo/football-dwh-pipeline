@@ -14,8 +14,6 @@ An end-to-end football analytics data platform built with Apache Airflow, dbt, a
 
 ## Architecture
 
-## Architecture
-
 ![Architecture](docs/architecture.svg)
 
 
@@ -92,30 +90,6 @@ Three warehouses for workload isolation:
 
 ---
 
-## Project Structure
-
-football-dwh-pipeline/
-├── airflow/
-│ ├── dags/
-│ │ ├── dag_extract_fixtures.py
-│ │ ├── dag_extract_players.py
-│ │ └── dag_extract_standings.py
-│ └── docker-compose.yml
-├── dbt/
-│ └── football_dwh/
-│ ├── models/
-│ │ ├── staging/
-│ │ └── marts/
-│ ├── dbt_project.yml
-│ └── packages.yml
-├── snowflake/
-│ └── setup.sql
-├── .env.example
-├── requirements.txt
-└── README.md
-
-
----
 
 ## Getting Started
 
