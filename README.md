@@ -14,23 +14,9 @@ An end-to-end football analytics data platform built with Apache Airflow, dbt, a
 
 ## Architecture
 
-API-Football (REST API)
-│
-▼
-Apache Airflow (Orchestration)
-Extract → Load → Schedule
-│
-▼
-Snowflake RAW Database
-(Raw JSON + structured columns)
-│
-▼
-dbt (Transformation)
-Staging → Marts
-│
-▼
-Snowflake MARTS Database
-(Star Schema — fact + dimension tables)
+## Architecture
+
+![Architecture](docs/architecture.svg)
 
 
 ---

@@ -1,0 +1,123 @@
+<svg width="900" height="620" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="900" height="620" fill="#0d1117" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="600">football-dwh-pipeline — Architecture</text>
+
+  <!-- ─── LAYER LABELS (left side) ─── -->
+  <text x="30" y="110" fill="#8b949e" font-size="11" font-weight="500">SOURCE</text>
+  <text x="30" y="210" fill="#8b949e" font-size="11" font-weight="500">ORCHESTRATION</text>
+  <text x="30" y="340" fill="#8b949e" font-size="11" font-weight="500">RAW LAYER</text>
+  <text x="30" y="430" fill="#8b949e" font-size="11" font-weight="500">TRANSFORM</text>
+  <text x="30" y="540" fill="#8b949e" font-size="11" font-weight="500">MARTS</text>
+
+  <!-- ─── LAYER 1: API-Football ─── -->
+  <rect x="290" y="70" width="320" height="64" rx="8" fill="#1f1b2e" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="450" y="97" text-anchor="middle" fill="#c4b5fd" font-size="13" font-weight="600">API-Football</text>
+  <text x="450" y="116" text-anchor="middle" fill="#8b949e" font-size="11">REST API — fixtures · standings · players</text>
+
+  <!-- Arrow 1 -->
+  <line x1="450" y1="134" x2="450" y2="158" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="460" y="139" width="38" height="16" rx="3" fill="#161b22"/>
+  <text x="479" y="151" text-anchor="middle" fill="#8b949e" font-size="10">JSON</text>
+
+  <!-- ─── LAYER 2: Airflow ─── -->
+  <rect x="160" y="158" width="580" height="88" rx="8" fill="#1b1f2e" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="450" y="182" text-anchor="middle" fill="#a5b4fc" font-size="13" font-weight="600">Apache Airflow — Docker</text>
+
+  <!-- Three DAG pills -->
+  <rect x="178" y="194" width="160" height="26" rx="5" fill="#0d1117" stroke="#6366f1" stroke-width="1"/>
+  <text x="258" y="211" text-anchor="middle" fill="#a5b4fc" font-size="10">dag_extract_fixtures</text>
+
+  <rect x="370" y="194" width="160" height="26" rx="5" fill="#0d1117" stroke="#6366f1" stroke-width="1"/>
+  <text x="450" y="211" text-anchor="middle" fill="#a5b4fc" font-size="10">dag_extract_standings</text>
+
+  <rect x="562" y="194" width="160" height="26" rx="5" fill="#0d1117" stroke="#6366f1" stroke-width="1"/>
+  <text x="642" y="211" text-anchor="middle" fill="#a5b4fc" font-size="10">dag_extract_players</text>
+
+  <text x="450" y="238" text-anchor="middle" fill="#8b949e" font-size="10">Schedule · retries · XCom · incremental MERGE loads</text>
+
+  <!-- Arrow 2 -->
+  <line x1="450" y1="246" x2="450" y2="270" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="456" y="251" width="44" height="16" rx="3" fill="#161b22"/>
+  <text x="478" y="263" text-anchor="middle" fill="#8b949e" font-size="10">MERGE</text>
+
+  <!-- ─── LAYER 3: Snowflake RAW ─── -->
+  <rect x="160" y="270" width="580" height="72" rx="8" fill="#0f2a2a" stroke="#0e7490" stroke-width="1.5"/>
+  <text x="450" y="294" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="600">Snowflake — FOOTBALL_RAW</text>
+
+  <!-- Three table pills -->
+  <rect x="190" y="304" width="140" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="260" y="320" text-anchor="middle" fill="#67e8f9" font-size="10">RAW_FIXTURES</text>
+
+  <rect x="380" y="304" width="140" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="450" y="320" text-anchor="middle" fill="#67e8f9" font-size="10">RAW_STANDINGS</text>
+
+  <rect x="570" y="304" width="140" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="640" y="320" text-anchor="middle" fill="#67e8f9" font-size="10">RAW_PLAYERS</text>
+
+  <!-- Arrow 3 -->
+  <line x1="450" y1="342" x2="450" y2="366" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="456" y="347" width="28" height="16" rx="3" fill="#161b22"/>
+  <text x="470" y="359" text-anchor="middle" fill="#8b949e" font-size="10">SQL</text>
+
+  <!-- ─── LAYER 4: dbt ─── -->
+  <rect x="160" y="366" width="460" height="72" rx="8" fill="#1a1f2e" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="390" y="390" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="600">dbt Core — orchestrated by Airflow</text>
+
+  <rect x="180" y="400" width="160" height="24" rx="5" fill="#0d1117" stroke="#2563eb" stroke-width="1"/>
+  <text x="260" y="416" text-anchor="middle" fill="#93c5fd" font-size="10">staging views</text>
+
+  <rect x="360" y="400" width="160" height="24" rx="5" fill="#0d1117" stroke="#2563eb" stroke-width="1"/>
+  <text x="440" y="416" text-anchor="middle" fill="#93c5fd" font-size="10">13 tests · docs · lineage</text>
+
+  <!-- GitHub CI badge (right of dbt) -->
+  <rect x="642" y="366" width="98" height="72" rx="8" fill="#0f2a0f" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="691" y="393" text-anchor="middle" fill="#86efac" font-size="11" font-weight="600">GitHub CI</text>
+  <text x="691" y="410" text-anchor="middle" fill="#8b949e" font-size="9">dbt test</text>
+  <text x="691" y="424" text-anchor="middle" fill="#8b949e" font-size="9">on every push</text>
+
+  <!-- dashed connector from CI to dbt -->
+  <line x1="642" y1="402" x2="622" y2="402" stroke="#16a34a" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- Arrow 4 -->
+  <line x1="390" y1="438" x2="390" y2="462" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ─── LAYER 5: Snowflake MARTS ─── -->
+  <rect x="160" y="462" width="460" height="90" rx="8" fill="#0f2a2a" stroke="#0e7490" stroke-width="1.5"/>
+  <text x="390" y="486" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="600">Snowflake — FOOTBALL_MARTS</text>
+
+  <rect x="180" y="498" width="120" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="240" y="514" text-anchor="middle" fill="#67e8f9" font-size="10">dim_teams</text>
+
+  <rect x="320" y="498" width="130" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="385" y="514" text-anchor="middle" fill="#67e8f9" font-size="10">fact_standings</text>
+
+  <rect x="470" y="498" width="130" height="24" rx="5" fill="#0d1117" stroke="#0e7490" stroke-width="1"/>
+  <text x="535" y="514" text-anchor="middle" fill="#67e8f9" font-size="10">fact_player_stats</text>
+
+  <text x="390" y="544" text-anchor="middle" fill="#8b949e" font-size="10">Star schema — analytics ready</text>
+
+  <!-- ─── LEGEND ─── -->
+  <rect x="160" y="570" width="580" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <rect x="180" y="582" width="10" height="10" rx="2" fill="#7c3aed"/>
+  <text x="196" y="591" fill="#8b949e" font-size="10">Source</text>
+  <rect x="260" y="582" width="10" height="10" rx="2" fill="#6366f1"/>
+  <text x="276" y="591" fill="#8b949e" font-size="10">Orchestration</text>
+  <rect x="370" y="582" width="10" height="10" rx="2" fill="#0e7490"/>
+  <text x="386" y="591" fill="#8b949e" font-size="10">Snowflake</text>
+  <rect x="460" y="582" width="10" height="10" rx="2" fill="#2563eb"/>
+  <text x="476" y="591" fill="#8b949e" font-size="10">dbt</text>
+  <rect x="510" y="582" width="10" height="10" rx="2" fill="#16a34a"/>
+  <text x="526" y="591" fill="#8b949e" font-size="10">GitHub CI</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#30363d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+</svg>
