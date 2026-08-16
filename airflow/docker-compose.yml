@@ -6,43 +6,32 @@ version: '3.8'
 # ================================
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.9.1
+  build: .
   environment:
     &airflow-common-env
-    # LocalExecutor runs tasks as subprocesses
-    # Good enough for a portfolio project
-    # Production would use CeleryExecutor or KubernetesExecutor
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-
-    # Airflow's internal metadata database connection
-    # Stores DAG runs, task states, schedules
-    # This is NOT our data warehouse — purely Airflow internal
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
-
-    # Makes our project root visible inside containers
     PYTHONPATH: /opt/airflow
-
-    # Pass our .env variables into the containers
     API_FOOTBALL_KEY: ${API_FOOTBALL_KEY}
     SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
     SNOWFLAKE_USER: ${SNOWFLAKE_USER}
     SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
     SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
     SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE}
+    SNOWFLAKE_TRANSFORMER_ROLE: ${SNOWFLAKE_TRANSFORMER_ROLE}
     SNOWFLAKE_RAW_DATABASE: ${SNOWFLAKE_RAW_DATABASE}
     SNOWFLAKE_RAW_SCHEMA: ${SNOWFLAKE_RAW_SCHEMA}
 
   volumes:
-    # Mount local dags folder into container
-    # Any DAG file you create locally appears in Airflow instantly
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./requirements.txt:/requirements.txt
+    - ../dbt:/opt/airflow/dbt
 
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
@@ -54,9 +43,6 @@ services:
 
   # ================================
   # Postgres
-  # Airflow internal metadata database
-  # Stores DAG runs, task states, logs metadata
-  # NOT our data warehouse
   # ================================
   postgres:
     image: postgres:13
@@ -74,8 +60,6 @@ services:
 
   # ================================
   # Airflow Webserver
-  # The UI you interact with
-  # Runs on http://localhost:8080
   # ================================
   airflow-webserver:
     <<: *airflow-common
@@ -95,8 +79,6 @@ services:
 
   # ================================
   # Airflow Scheduler
-  # The brain of Airflow
-  # Watches DAGs, triggers tasks on schedule
   # ================================
   airflow-scheduler:
     <<: *airflow-common
@@ -109,8 +91,6 @@ services:
 
   # ================================
   # Airflow Init
-  # Runs once on first startup only
-  # Sets up Airflow database and creates admin user
   # ================================
   airflow-init:
     <<: *airflow-common

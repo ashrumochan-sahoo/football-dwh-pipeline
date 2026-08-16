@@ -1,0 +1,13 @@
+football_dwh:
+  target: prod
+  outputs:
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_TRANSFORMER_ROLE') }}"
+      warehouse: FOOTBALL_TRANSFORM_WH
+      database: FOOTBALL_MARTS
+      schema: FOOTBALL
+      threads: 4
