@@ -6,6 +6,7 @@
 ![Snowflake](https://img.shields.io/badge/Snowflake-GCP-29B5E8)
 ![Tests](https://img.shields.io/badge/dbt%20Tests-13%20Passing-brightgreen)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
+![dbt CI](https://github.com/ashrumochan-sahoo/football-dwh-pipeline/actions/workflows/dbt_ci.yml/badge.svg)
 
 An end-to-end football analytics data platform built with Apache Airflow, dbt, and Snowflake. Extracts real football data from the API-Football REST API, loads it into a cloud data warehouse, and transforms it into an analytics-ready star schema.
 
